@@ -15,6 +15,12 @@ jobs:
             . venv/bin/activate
             pip install -r requirements.txt
 
+      - run:
+          name: run tests
+          command: |
+            . venv/bin/activate
+            pytest
+
       - store_artifacts:
           path: test_reports
           destination: test_reports
