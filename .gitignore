@@ -1,0 +1,4 @@
+phase1/__pycache__/
+phase1/.pytest_cache/
+.idea/
+venv/
