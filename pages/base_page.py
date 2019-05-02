@@ -1,10 +1,13 @@
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.common.by import By
 
 
 class BasePage(object):
     __base_url = "https://jira.hillel.it"
+
+    __CORNER_POPUP_MESSAGE = (By.CSS_SELECTOR, ".aui-message")
 
     def __init__(self, driver):
         self.__driver = driver
@@ -124,3 +127,6 @@ class BasePage(object):
             wait.until(EC.invisibility_of_element((strategy, locator)))
         except (TimeoutException, NoSuchElementException):
             raise
+
+    def wait_until_corner_popup_message_is_hidden(self):
+        self.wait_until_element_invisible(*self.__CORNER_POPUP_MESSAGE)

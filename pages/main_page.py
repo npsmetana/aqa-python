@@ -41,6 +41,8 @@ class MainPage(BasePage):
         return CreateIssuePage(self.driver)
 
     def enable_all_search_filters(self):
+        self.wait_until_corner_popup_message_is_hidden()
+
         self.wait_element_visible(*self.__VIEW_ALL_FILTERS_LINK)
         self.click_element(*self.__VIEW_ALL_FILTERS_LINK)
         self.wait_element_visible(*self.__ORDER_BY_BUTTON)
