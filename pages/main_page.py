@@ -41,7 +41,9 @@ class MainPage(BasePage):
         return CreateIssuePage(self.driver)
 
     def enable_all_search_filters(self):
+        self.wait_element_visible(*self.__VIEW_ALL_FILTERS_LINK)
         self.click_element(*self.__VIEW_ALL_FILTERS_LINK)
+        self.wait_element_visible(*self.__ORDER_BY_BUTTON)
         self.find_element(*self.__ORDER_BY_BUTTON)
 
     def find_issue(self, summary, reset_search):
@@ -98,6 +100,7 @@ class MainPage(BasePage):
     def update_issue_assignee(self, assignee):
         self.click_element(*self.__EDIT_ISSUE_ASSIGNEE)
         self.set_assignee_text(assignee + Keys.ENTER, *self.__EDIT_ISSUE_ASSIGNEE_INPUT)
+        self.wait_element_visible(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.click_element(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.find_element(*self.__EDIT_ISSUE_ASSIGNEE)
         return self.wait_till_text_appeared_in_element(assignee, *self.__EDIT_ISSUE_ASSIGNEE)
