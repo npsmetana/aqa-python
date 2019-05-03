@@ -2,6 +2,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.common.by import By
+import time
 
 
 class BasePage(object):
@@ -129,5 +130,12 @@ class BasePage(object):
             raise
 
     def wait_until_corner_popup_message_is_hidden(self):
-        self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
-        self.wait_until_element_invisible(*self.__CORNER_POPUP_MESSAGE)
+        try:
+            for i in range(1, 10):
+                self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE, 1)
+                time.sleep(1)
+        except:
+            pass
+
+        # EC.invisibility_of_element doesn't work on CircleCI mahcines for some reason
+        # self.wait_until_element_invisible(*self.__CORNER_POPUP_MESSAGE)
