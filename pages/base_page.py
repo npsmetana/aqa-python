@@ -129,4 +129,5 @@ class BasePage(object):
             raise
 
     def wait_until_corner_popup_message_is_hidden(self):
+        self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
         self.wait_until_element_invisible(*self.__CORNER_POPUP_MESSAGE)

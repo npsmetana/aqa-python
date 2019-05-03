@@ -26,8 +26,6 @@ class CreateIssuePage(BasePage):
 
         self.click_element(*self.__CREATE_ISSUE_BUTTON)
 
-        # self.wait_element_visible(*self.__FOCUSED_ISSUE_ITEM)
-        # self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
         self.wait_until_corner_popup_message_is_hidden()
 
     def cancel_creation(self):
