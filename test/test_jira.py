@@ -48,11 +48,9 @@ def test_create_issue(get_driver):
     login_page.login(USER, PASSWORD)
     assert main_page.is_logged_in()
 
-    main_page.enable_all_search_filters()
-
     create_issue_page = main_page.open_create_issue()
     create_issue_page.create_issue(ISSUE_SUMMARY)
-    assert main_page.find_issue(ISSUE_SUMMARY, (not RESET_SEARCH_FILTER))
+    assert main_page.find_issue(ISSUE_SUMMARY)
 
     main_page.open_create_issue()
     assert create_issue_page.create_issue_no_summary()
@@ -72,11 +70,9 @@ def test_find_issue(get_driver):
     login_page.login(USER, PASSWORD)
     assert main_page.is_logged_in()
 
-    main_page.enable_all_search_filters()
+    assert main_page.find_issue(ISSUE_SUMMARY)
 
-    assert main_page.find_issue(ISSUE_SUMMARY, RESET_SEARCH_FILTER)
-
-    assert main_page.find_issue_no_results("z" * 250, RESET_SEARCH_FILTER)
+    assert main_page.find_issue_no_results("z" * 250)
 
 
 def test_update_issue(get_driver):
@@ -90,8 +86,7 @@ def test_update_issue(get_driver):
     login_page.login(USER, PASSWORD)
     assert main_page.is_logged_in()
 
-    main_page.enable_all_search_filters()
-    main_page.find_issue(ISSUE_SUMMARY, (not RESET_SEARCH_FILTER))
+    main_page.find_issue(ISSUE_SUMMARY)
 
     assert main_page.update_issue_summary(ISSUE_SUMMARY_UPD)
 

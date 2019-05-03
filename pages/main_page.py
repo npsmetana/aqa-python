@@ -9,6 +9,9 @@ from selenium.webdriver.remote.webelement import WebElement
 class MainPage(BasePage):
     __CREATE_ISSUE_BUTTON = (By.ID, "create_link")
     __VIEW_ALL_FILTERS_LINK = (By.CSS_SELECTOR, "#full-issue-navigator>a")
+    __ISSUES_MAIN_MENU = (By.ID, "find_link")
+    __SEARCH_FOR_ISSUES_MAIN_MENU_ITEM = (By.ID, "issues_new_search_link_lnk")
+    __FOCUSED_ISSUE_ITEM = (By.CSS_SELECTOR, "li.focused")
     __CONTAINS_TEXT_SEARCHER_INPUT = (By.ID, "searcher-query")
     __SEARCH_BUTTON = (By.CSS_SELECTOR, ".search-button")
     __NO_ISSUES_FOUND_MESSAGE = (By.CSS_SELECTOR, ".no-results-message")
@@ -20,10 +23,6 @@ class MainPage(BasePage):
     __EDIT_ISSUE_ASSIGNEE = (By.ID, "assignee-val")
     __EDIT_ISSUE_ASSIGNEE_INPUT = (By.ID, "assignee-field")
     __EDIT_ISSUE_ASSIGNEE_TEXT_CONTAINER = (By.CSS_SELECTOR, "#assignee-val>.user-hover")
-    __ISSUE_MORE_ACTIONS_DROPDOWN = (By.ID, "opsbar-operations_more")
-    __ISSUE_ACTION_DELETE_ITEM = (By.CSS_SELECTOR, "aui-item-link.issueaction-delete-issue")
-    __CONFIRM_DELETE_BUTTON = (By.ID, "delete-issue-submit")
-    __ORDER_BY_BUTTON = (By.CSS_SELECTOR, ".order-by")
 
     def __init__(self, driver):
         super(MainPage, self).__init__(driver)
@@ -34,57 +33,47 @@ class MainPage(BasePage):
         return self.is_page_opened_by_url(self.__logged_in_url)
 
     def open_create_issue(self):
-        self.wait_element_visible(*self.__ORDER_BY_BUTTON)
-        self.wait_element_clickable(*self.__ORDER_BY_BUTTON)
+        self.wait_element_visible(*self.__FOCUSED_ISSUE_ITEM)
+        self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
         self.wait_element_visible(*self.__CREATE_ISSUE_BUTTON)
         self.click_element(*self.__CREATE_ISSUE_BUTTON)
         return CreateIssuePage(self.driver)
 
-    def enable_all_search_filters(self):
-        self.wait_until_corner_popup_message_is_hidden()
-
-        self.wait_element_visible(*self.__VIEW_ALL_FILTERS_LINK)
-        self.click_element(*self.__VIEW_ALL_FILTERS_LINK)
-        self.wait_element_visible(*self.__ORDER_BY_BUTTON)
-        self.find_element(*self.__ORDER_BY_BUTTON)
-
-    def find_issue(self, summary, reset_search):
-        issue_found = False
-
+    def find_issue(self, summary):
         self.search_for_it(summary)
 
+        self.wait_element_visible(*self.__FOCUSED_ISSUE_ITEM)
+        self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
+
         try:
-            issue_found = self.wait_till_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
+            self.wait_till_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
+            return True
         except (TimeoutException, NoSuchElementException):
-            pass
+            return False
 
-        if reset_search:
-            self.search_for_it("")
-
-        return issue_found
-
-    def find_issue_no_results(self, summary, reset_search):
-        check_passed = False
-
+    def find_issue_no_results(self, summary):
         self.search_for_it(summary)
 
         try:
+            self.wait_element_visible(*self.__NO_ISSUES_FOUND_MESSAGE)
             self.find_element(*self.__NO_ISSUES_FOUND_MESSAGE)
-            check_passed = True
+            return True
         except (TimeoutException, NoSuchElementException):
-            pass
-
-        if reset_search:
-            self.search_for_it("")
-        return check_passed
+            return False
 
     def search_for_it(self, summary):
-        self.wait_element_visible(*self.__SEARCH_BUTTON)
-        self.wait_element_clickable(*self.__SEARCH_BUTTON)
+        self.wait_element_visible(*self.__ISSUES_MAIN_MENU)
+        self.click_element(*self.__ISSUES_MAIN_MENU)
+        self.wait_element_visible(*self.__SEARCH_FOR_ISSUES_MAIN_MENU_ITEM)
+        self.click_element(*self.__SEARCH_FOR_ISSUES_MAIN_MENU_ITEM)
+
+        self.wait_element_visible(*self.__FOCUSED_ISSUE_ITEM)
+        self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
 
         self.wait_element_visible(*self.__CONTAINS_TEXT_SEARCHER_INPUT)
         self.click_element(*self.__CONTAINS_TEXT_SEARCHER_INPUT)
         self.set_element_text(summary, *self.__CONTAINS_TEXT_SEARCHER_INPUT)
+        # self.wait_element_visible(*self.__SEARCH_BUTTON)
         self.click_element(*self.__SEARCH_BUTTON)
 
     def update_issue_summary(self, summary):

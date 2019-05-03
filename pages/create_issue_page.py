@@ -12,7 +12,7 @@ class CreateIssuePage(BasePage):
     __ISSUE_TYPE_INPUT = (By.ID, "issuetype-field")
     __ISSUE_SUMMARY_INPUT = (By.ID, "summary")
     __SUMMARY_ERROR_MESSAGE = (By.CSS_SELECTOR, ".error[data-field='summary']")
-    __CLOSE_INFO_MESSAGE_BUTTON = (By.CSS_SELECTOR, ".aui-icon.icon-close")
+    __FOCUSED_ISSUE_ITEM = (By.CSS_SELECTOR, "li.focused")
 
     def __init__(self, driver):
         super(CreateIssuePage, self).__init__(driver)
@@ -26,6 +26,8 @@ class CreateIssuePage(BasePage):
 
         self.click_element(*self.__CREATE_ISSUE_BUTTON)
 
+        # self.wait_element_visible(*self.__FOCUSED_ISSUE_ITEM)
+        # self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
         self.wait_until_corner_popup_message_is_hidden()
 
     def cancel_creation(self):
