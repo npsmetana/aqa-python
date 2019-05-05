@@ -107,7 +107,7 @@ class BasePage(object):
 
         return elements
 
-    def wait_till_text_appeared_in_element(self, text, strategy, locator, wait_time=None):
+    def wait_until_text_appeared_in_element(self, text, strategy, locator, wait_time=None):
         if wait_time is None:
             wait = self.__wait
         else:
@@ -119,17 +119,6 @@ class BasePage(object):
         except (TimeoutException, NoSuchElementException):
             raise
 
-    def wait_until_element_invisible(self, strategy, locator, wait_time=None):
-        if wait_time is None:
-            wait = self.__wait
-        else:
-            wait = WebDriverWait(self.__driver, wait_time)
-
-        try:
-            wait.until(EC.invisibility_of_element((strategy, locator)))
-        except (TimeoutException, NoSuchElementException):
-            raise
-
     def wait_until_corner_popup_message_is_hidden(self):
         self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
         for i in range(1, 10):
@@ -137,6 +126,3 @@ class BasePage(object):
             if element.get_attribute("aria-hidden").lower().strip() == "true":
                 return
             time.sleep(1)
-
-        # self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
-        # self.wait_until_element_invisible(*self.__CORNER_POPUP_MESSAGE)

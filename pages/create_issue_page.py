@@ -2,7 +2,6 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
-# import keyboard
 import time
 from pynput.keyboard import Key, Controller
 
@@ -13,7 +12,6 @@ class CreateIssuePage(BasePage):
     __ISSUE_TYPE_INPUT = (By.ID, "issuetype-field")
     __ISSUE_SUMMARY_INPUT = (By.ID, "summary")
     __SUMMARY_ERROR_MESSAGE = (By.CSS_SELECTOR, ".error[data-field='summary']")
-    __FOCUSED_ISSUE_ITEM = (By.CSS_SELECTOR, "li.focused")
 
     def __init__(self, driver):
         super(CreateIssuePage, self).__init__(driver)
@@ -31,12 +29,9 @@ class CreateIssuePage(BasePage):
 
     def cancel_creation(self):
         self.click_element(*self.__CANCEL_ISSUE_BUTTON)
+
         # "Cancel create issue" popup can't be recognized/controlled via Selenium
         # So just direct 'time.sleep()' waits are used
-        # time.sleep(1)
-        # keyboard.press("enter")
-        # time.sleep(0.5)
-        # keyboard.release("enter")
         keyboard = Controller()
         time.sleep(1)
         keyboard.press(Key.enter)

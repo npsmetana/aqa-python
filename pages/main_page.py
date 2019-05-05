@@ -3,12 +3,10 @@ from pages.create_issue_page import CreateIssuePage
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.remote.webelement import WebElement
 
 
 class MainPage(BasePage):
     __CREATE_ISSUE_BUTTON = (By.ID, "create_link")
-    __VIEW_ALL_FILTERS_LINK = (By.CSS_SELECTOR, "#full-issue-navigator>a")
     __ISSUES_MAIN_MENU = (By.ID, "find_link")
     __SEARCH_FOR_ISSUES_MAIN_MENU_ITEM = (By.ID, "issues_new_search_link_lnk")
     __FOCUSED_ISSUE_ITEM = (By.CSS_SELECTOR, "li.focused")
@@ -27,7 +25,6 @@ class MainPage(BasePage):
     def __init__(self, driver):
         super(MainPage, self).__init__(driver)
         self.__logged_in_url = self.base_url + "/projects/WEBINAR/issues"
-        self.__logout_url = self.base_url + "/secure/Logout.jsp"
 
     def is_logged_in(self):
         return self.is_page_opened_by_url(self.__logged_in_url)
@@ -46,7 +43,7 @@ class MainPage(BasePage):
         self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
 
         try:
-            self.wait_till_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
+            self.wait_until_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
             return True
         except (TimeoutException, NoSuchElementException):
             return False
@@ -73,28 +70,26 @@ class MainPage(BasePage):
         self.wait_element_visible(*self.__CONTAINS_TEXT_SEARCHER_INPUT)
         self.click_element(*self.__CONTAINS_TEXT_SEARCHER_INPUT)
         self.set_element_text(summary, *self.__CONTAINS_TEXT_SEARCHER_INPUT)
-        # self.wait_element_visible(*self.__SEARCH_BUTTON)
         self.click_element(*self.__SEARCH_BUTTON)
 
     def update_issue_summary(self, summary):
         self.click_element(*self.__EDIT_ISSUE_SUMMARY)
         self.set_element_text(summary + Keys.ENTER, *self.__EDIT_ISSUE_SUMMARY_INPUT)
-        return self.wait_till_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
+        return self.wait_until_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
 
     def update_issue_priority(self, priority):
         self.click_element(*self.__EDIT_ISSUE_PRIORITY)
         self.set_element_text(priority + Keys.ENTER, *self.__EDIT_ISSUE_PRIORITY_INPUT)
         self.click_element(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.find_element(*self.__EDIT_ISSUE_PRIORITY)
-        return self.wait_till_text_appeared_in_element(priority, *self.__EDIT_ISSUE_PRIORITY)
+        return self.wait_until_text_appeared_in_element(priority, *self.__EDIT_ISSUE_PRIORITY)
 
     def update_issue_assignee(self, assignee):
         self.click_element(*self.__EDIT_ISSUE_ASSIGNEE)
         self.set_assignee_text(assignee + Keys.ENTER, *self.__EDIT_ISSUE_ASSIGNEE_INPUT)
-        # self.wait_element_visible(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.click_element(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.find_element(*self.__EDIT_ISSUE_ASSIGNEE)
-        return self.wait_till_text_appeared_in_element(assignee, *self.__EDIT_ISSUE_ASSIGNEE)
+        return self.wait_until_text_appeared_in_element(assignee, *self.__EDIT_ISSUE_ASSIGNEE)
 
     def set_assignee_text(self, text, strategy, locator, wait_time=None):
         self.wait_element_visible(strategy, locator, wait_time)
