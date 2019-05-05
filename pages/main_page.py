@@ -87,6 +87,7 @@ class MainPage(BasePage):
     def update_issue_assignee(self, assignee):
         self.click_element(*self.__EDIT_ISSUE_ASSIGNEE)
         self.set_assignee_text(assignee + Keys.ENTER, *self.__EDIT_ISSUE_ASSIGNEE_INPUT)
+        self.wait_element_visible(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.click_element(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.find_element(*self.__EDIT_ISSUE_ASSIGNEE)
         return self.wait_until_text_appeared_in_element(assignee, *self.__EDIT_ISSUE_ASSIGNEE)
