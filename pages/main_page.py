@@ -20,7 +20,6 @@ class MainPage(BasePage):
     __EDIT_ISSUE_PRIORITY_INPUT = (By.ID, "priority-field")
     __EDIT_ISSUE_ASSIGNEE = (By.ID, "assignee-val")
     __EDIT_ISSUE_ASSIGNEE_INPUT = (By.ID, "assignee-field")
-    # __EDIT_ISSUE_ASSIGNEE_SELECT = (By.ID, "assignee-single-select")
 
     def __init__(self, driver):
         super(MainPage, self).__init__(driver)
@@ -43,8 +42,7 @@ class MainPage(BasePage):
         self.wait_element_clickable(*self.__FOCUSED_ISSUE_ITEM)
 
         try:
-            self.wait_until_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
-            return True
+            return self.wait_until_text_appeared_in_element(summary, *self.__EDIT_ISSUE_SUMMARY)
         except (TimeoutException, NoSuchElementException):
             return False
 

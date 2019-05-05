@@ -114,8 +114,7 @@ class BasePage(object):
             wait = WebDriverWait(self.__driver, wait_time)
 
         try:
-            text_found = wait.until(EC.text_to_be_present_in_element((strategy, locator), text))
-            return text_found
+            return wait.until(EC.text_to_be_present_in_element((strategy, locator), text))
         except (TimeoutException, NoSuchElementException):
             raise
 
