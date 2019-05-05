@@ -9,6 +9,7 @@ class BasePage(object):
     __base_url = "https://jira.hillel.it"
 
     __CORNER_POPUP_MESSAGE = (By.CSS_SELECTOR, ".aui-message")
+    __CORNER_POPUP_MESSAGE_ARIA = (By.CSS_SELECTOR, ".aui-flag")
 
     def __init__(self, driver):
         self.__driver = driver
@@ -130,12 +131,12 @@ class BasePage(object):
             raise
 
     def wait_until_corner_popup_message_is_hidden(self):
-        try:
-            for i in range(1, 10):
-                self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE, 1)
-                time.sleep(1)
-        except:
-            pass
+        self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
+        for i in range(1, 10):
+            element = self.find_element(*self.__CORNER_POPUP_MESSAGE_ARIA)
+            if element.get_attribute("aria-hidden").lower().strip() == "true":
+                return
+            time.sleep(1)
 
-        # EC.invisibility_of_element doesn't work on CircleCI mahcines for some reason
+        # self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
         # self.wait_until_element_invisible(*self.__CORNER_POPUP_MESSAGE)

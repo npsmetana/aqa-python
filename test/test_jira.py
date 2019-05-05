@@ -19,24 +19,24 @@ def get_driver():
     driver.close()
 
 
-def test_login(get_driver):
-    driver = get_driver
-
-    login_page = LoginPage(driver)
-    main_page = MainPage(driver)
-
-    login_page.open()
-
-    login_page.login(BAD_USER, PASSWORD)
-    assert login_page.is_login_failed()
-
-    login_page.login(USER, BAD_PASSWORD)
-    assert login_page.is_login_failed()
-
-    login_page.login(USER, PASSWORD)
-    assert main_page.is_logged_in()
-
-
+# def test_login(get_driver):
+#     driver = get_driver
+#
+#     login_page = LoginPage(driver)
+#     main_page = MainPage(driver)
+#
+#     login_page.open()
+#
+#     login_page.login(BAD_USER, PASSWORD)
+#     assert login_page.is_login_failed()
+#
+#     login_page.login(USER, BAD_PASSWORD)
+#     assert login_page.is_login_failed()
+#
+#     login_page.login(USER, PASSWORD)
+#     assert main_page.is_logged_in()
+#
+#
 def test_create_issue(get_driver):
     driver = get_driver
 
@@ -59,37 +59,37 @@ def test_create_issue(get_driver):
     assert create_issue_page.create_issue_too_long_summary()
 
 
-def test_find_issue(get_driver):
-    driver = get_driver
-
-    login_page = LoginPage(driver)
-    main_page = MainPage(driver)
-
-    login_page.open()
-
-    login_page.login(USER, PASSWORD)
-    assert main_page.is_logged_in()
-
-    assert main_page.find_issue(ISSUE_SUMMARY)
-
-    assert main_page.find_issue_no_results("z" * 250)
-
-
-def test_update_issue(get_driver):
-    driver = get_driver
-
-    login_page = LoginPage(driver)
-    main_page = MainPage(driver)
-
-    login_page.open()
-
-    login_page.login(USER, PASSWORD)
-    assert main_page.is_logged_in()
-
-    main_page.find_issue(ISSUE_SUMMARY)
-
-    assert main_page.update_issue_summary(ISSUE_SUMMARY_UPD)
-
-    assert main_page.update_issue_priority(ISSUE_PRIORITY_UPD)
-
-    assert main_page.update_issue_assignee(ISSUE_ASSIGNEE_UPD)
+# def test_find_issue(get_driver):
+#     driver = get_driver
+#
+#     login_page = LoginPage(driver)
+#     main_page = MainPage(driver)
+#
+#     login_page.open()
+#
+#     login_page.login(USER, PASSWORD)
+#     assert main_page.is_logged_in()
+#
+#     assert main_page.find_issue(ISSUE_SUMMARY)
+#
+#     assert main_page.find_issue_no_results("z" * 250)
+#
+#
+# def test_update_issue(get_driver):
+#     driver = get_driver
+#
+#     login_page = LoginPage(driver)
+#     main_page = MainPage(driver)
+#
+#     login_page.open()
+#
+#     login_page.login(USER, PASSWORD)
+#     assert main_page.is_logged_in()
+#
+#     main_page.find_issue(ISSUE_SUMMARY)
+#
+#     assert main_page.update_issue_summary(ISSUE_SUMMARY_UPD)
+#
+#     assert main_page.update_issue_priority(ISSUE_PRIORITY_UPD)
+#
+#     assert main_page.update_issue_assignee(ISSUE_ASSIGNEE_UPD)
