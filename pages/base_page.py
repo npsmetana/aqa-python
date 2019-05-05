@@ -121,8 +121,14 @@ class BasePage(object):
 
     def wait_until_corner_popup_message_is_hidden(self):
         self.wait_element_visible(*self.__CORNER_POPUP_MESSAGE)
-        for i in range(1, 10):
-            element = self.find_element(*self.__CORNER_POPUP_MESSAGE_ARIA)
-            if element.get_attribute("aria-hidden").lower().strip() == "true":
-                return
+        self.wait_until_attribute_equals_str("aria-hidden", "true", *self.__CORNER_POPUP_MESSAGE_ARIA)
+
+    def wait_until_attribute_equals_str(self, attribute, attribute_value, strategy, locator, wait_time=None):
+        if wait_time is None:
+            wait_time = 10
+        for i in range(1, wait_time):
+            element = self.find_element(strategy, locator)
+            if element.get_attribute(attribute).lower().strip() == str(attribute_value).lower():
+                return True
             time.sleep(1)
+        return False

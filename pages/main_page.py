@@ -20,7 +20,7 @@ class MainPage(BasePage):
     __EDIT_ISSUE_PRIORITY_INPUT = (By.ID, "priority-field")
     __EDIT_ISSUE_ASSIGNEE = (By.ID, "assignee-val")
     __EDIT_ISSUE_ASSIGNEE_INPUT = (By.ID, "assignee-field")
-    __EDIT_ISSUE_ASSIGNEE_TEXT_CONTAINER = (By.CSS_SELECTOR, "#assignee-val>.user-hover")
+    # __EDIT_ISSUE_ASSIGNEE_SELECT = (By.ID, "assignee-single-select")
 
     def __init__(self, driver):
         super(MainPage, self).__init__(driver)
@@ -87,7 +87,6 @@ class MainPage(BasePage):
     def update_issue_assignee(self, assignee):
         self.click_element(*self.__EDIT_ISSUE_ASSIGNEE)
         self.set_assignee_text(assignee + Keys.ENTER, *self.__EDIT_ISSUE_ASSIGNEE_INPUT)
-        self.wait_element_visible(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.click_element(*self.__EDIT_ISSUE_SUBMIT_CHANGES_BUTTON)
         self.find_element(*self.__EDIT_ISSUE_ASSIGNEE)
         return self.wait_until_text_appeared_in_element(assignee, *self.__EDIT_ISSUE_ASSIGNEE)

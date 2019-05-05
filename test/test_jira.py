@@ -88,8 +88,9 @@ def test_update_issue(get_driver):
 
     main_page.find_issue(ISSUE_SUMMARY)
 
+    assert main_page.update_issue_assignee(ISSUE_ASSIGNEE_UPD)
+
     assert main_page.update_issue_summary(ISSUE_SUMMARY_UPD)
 
     assert main_page.update_issue_priority(ISSUE_PRIORITY_UPD)
 
-    assert main_page.update_issue_assignee(ISSUE_ASSIGNEE_UPD)
