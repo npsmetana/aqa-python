@@ -4,6 +4,7 @@ from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import NoSuchElementException, TimeoutException
 import time
 from pynput.keyboard import Key, Controller
+import allure
 
 
 class CreateIssuePage(BasePage):
@@ -13,20 +14,26 @@ class CreateIssuePage(BasePage):
     __ISSUE_SUMMARY_INPUT = (By.ID, "summary")
     __SUMMARY_ERROR_MESSAGE = (By.CSS_SELECTOR, ".error[data-field='summary']")
 
+    @allure.step("Init 'CreateIssuePage' object")
     def __init__(self, driver):
         super(CreateIssuePage, self).__init__(driver)
 
+    @allure.step
     def create_issue(self, summary):
         self.click_element(*self.__ISSUE_TYPE_INPUT)
         self.set_element_text("Bug" + Keys.ENTER, *self.__ISSUE_TYPE_INPUT)
 
         self.click_element(*self.__ISSUE_SUMMARY_INPUT)
         self.set_element_text(summary, *self.__ISSUE_SUMMARY_INPUT)
+        self.take_screen()
 
         self.click_element(*self.__CREATE_ISSUE_BUTTON)
+        self.take_screen()
 
         self.wait_until_corner_popup_message_is_hidden()
+        self.take_screen()
 
+    @allure.step
     def cancel_creation(self):
         self.click_element(*self.__CANCEL_ISSUE_BUTTON)
 
@@ -38,6 +45,7 @@ class CreateIssuePage(BasePage):
         time.sleep(0.5)
         keyboard.release(Key.enter)
 
+    @allure.step
     def create_issue_no_summary(self):
         check_passed = False
 
@@ -50,9 +58,11 @@ class CreateIssuePage(BasePage):
         except (TimeoutException, NoSuchElementException):
             pass
 
+        self.take_screen()
         self.cancel_creation()
         return check_passed
 
+    @allure.step
     def create_issue_too_long_summary(self):
         check_passed = False
 
@@ -67,6 +77,7 @@ class CreateIssuePage(BasePage):
         except (TimeoutException, NoSuchElementException):
             pass
 
+        self.take_screen()
         self.cancel_creation()
         return check_passed
 
