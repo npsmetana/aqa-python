@@ -12,3 +12,9 @@ ISSUE_PRIORITY_UPD = "Blocker"
 ISSUE_ASSIGNEE_UPD = "NicolaySmetana"
 ISSUE_SUMMARY_UPD = ISSUE_SUMMARY + " UPDATED"
 
+BASE_API_URL = "https://jira.hillel.it/rest/"
+REQ_API_HEADERS = {'Content-Type': 'application/json'}
+BASE_ISSUE_SUMMARY = "NSmetana test API issue"
+BASE_ISSUE_SUMMARY_UPDATED = BASE_ISSUE_SUMMARY + " UPDATED"
+PROJECT_NAME = "WEBINAR"
+ISSUE_TYPE = "Bug"
