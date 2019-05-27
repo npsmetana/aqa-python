@@ -15,6 +15,11 @@ Allure 2.11.0 or later
 ```bash
   python3 -m pytest --alluredir <allure-report-directory>
 ```
+- How to run Phase5: 
+```bash
+  python3 -m pytest -v -m api --alluredir <allure-report-directory>
+```
+
 - View report:
 ```bash 
   allure serve <allure-report-directory>
@@ -33,10 +38,10 @@ Allure 2.11.0 or later
 - Phase1 - Python: beginning
 - Phase2 - Work with files
 - Phase3 - Selenium tests
-
-### In progress
 - Phase4 - Allure reports for tests
 
-### What next
+### In progress
 - Phase5 - API tests
+
+### What next
 - Phase6 - Tests parallel execution
