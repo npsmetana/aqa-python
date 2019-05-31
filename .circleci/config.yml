@@ -24,7 +24,7 @@ jobs:
           name: run tests
           command: |
             . venv/bin/activate
-            pytest -m api --alluredir=/tmp/allure-data -v -l
+            pytest -v -n 4 --alluredir=./allure-results --dist=loadfile
       - run:
           name: generate report
           command: |

@@ -8,8 +8,7 @@ from helpers.constants import *
 import allure
 
 
-@pytest.fixture(scope="function")
-def get_driver():
+def preparation():
     with allure.step("Prepare browser"):
         options = webdriver.ChromeOptions()
         options.add_argument("--no-sandbox")
@@ -17,15 +16,18 @@ def get_driver():
         driver = webdriver.Chrome(executable_path=ChromeDriverManager().install(),
                                       desired_capabilities=options.to_capabilities())
         driver.set_window_size(1920, 1080)
-    yield driver
+        return driver
+
+
+def shutdown(driver):
     with allure.step("Close browser"):
         driver.close()
 
 
 @allure.title("Test login")
-def test_login(get_driver):
+def test_login():
     with allure.step("Test preparation"):
-        driver = get_driver
+        driver = preparation()
 
         login_page = LoginPage(driver)
         main_page = MainPage(driver)
@@ -44,11 +46,13 @@ def test_login(get_driver):
         login_page.login(USER, PASSWORD)
         assert main_page.is_logged_in()
 
+    shutdown(driver)
+
 
 @allure.title("Test issue creation")
-def test_create_issue(get_driver):
+def test_create_issue():
     with allure.step("Test preparation"):
-        driver = get_driver
+        driver = preparation()
 
         login_page = LoginPage(driver)
         main_page = MainPage(driver)
@@ -71,11 +75,13 @@ def test_create_issue(get_driver):
         main_page.open_create_issue()
         assert create_issue_page.create_issue_too_long_summary()
 
+    shutdown(driver)
+
 
 @allure.title("Test find issue")
-def test_find_issue(get_driver):
+def test_find_issue():
     with allure.step("Test preparation"):
-        driver = get_driver
+        driver = preparation()
 
         login_page = LoginPage(driver)
         main_page = MainPage(driver)
@@ -91,11 +97,14 @@ def test_find_issue(get_driver):
     with allure.step("Test find not existing issue"):
         assert main_page.find_issue_no_results("z" * 250)
 
+    shutdown(driver)
 
+
+@pytest.mark.skip
 @allure.title("Test update issue")
-def test_update_issue(get_driver):
+def test_update_issue():
     with allure.step("Test preparation"):
-        driver = get_driver
+        driver = preparation()
 
         login_page = LoginPage(driver)
         main_page = MainPage(driver)
@@ -117,3 +126,4 @@ def test_update_issue(get_driver):
     with allure.step("Test update issue 'Priority'"):
         assert main_page.update_issue_priority(ISSUE_PRIORITY_UPD)
 
+    shutdown(driver)

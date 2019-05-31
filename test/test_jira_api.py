@@ -5,8 +5,19 @@ from helpers.json_fixtures import *
 import allure
 from allure_commons.types import AttachmentType
 
-
 issue_keys = []
+flaky_test_pass_flag = False
+
+
+@pytest.mark.flaky(reruns=2, reruns_delay=2)
+@allure.title("Test re-run flaky test")
+def test_passes_on_second_run():
+    global flaky_test_pass_flag
+    with allure.step("This time test will pass: " + str(flaky_test_pass_flag)):
+        pass_flag = flaky_test_pass_flag
+        flaky_test_pass_flag = True
+        allure.attach(str(pass_flag), name="flaky_test_pass_flag", attachment_type=AttachmentType.TEXT)
+        assert pass_flag
 
 
 @pytest.mark.parametrize('user,password,code',
@@ -15,7 +26,6 @@ issue_keys = []
                              (BAD_USER, PASSWORD, 401),
                              (USER, PASSWORD, 200)
                          ])
-@pytest.mark.api
 @allure.title("Test API authentication")
 def test_api_login(user, password, code):
     with allure.step("Test preparation"):
@@ -41,7 +51,6 @@ def test_api_login(user, password, code):
                              ("", "Blocker", 400, "You must specify a summary of the issue."),
                              ("z" * 256, "Blocker", 400, "Summary must be less than 255 characters.")
                          ])
-@pytest.mark.api
 @allure.title("Test API create issue")
 def test_api_create_issue(summary, priority, code, err_msg):
     with allure.step("Test preparation"):
@@ -71,7 +80,6 @@ def test_api_create_issue(summary, priority, code, err_msg):
                              (BASE_ISSUE_SUMMARY, 5),
                              ("z" * 250, 0)
                          ])
-@pytest.mark.api
 @allure.title("Test API find issue")
 def test_api_search_issue(search_summary, num_found):
     with allure.step("Test preparation"):
@@ -98,7 +106,6 @@ def test_api_search_issue(search_summary, num_found):
                              ("assignee", USER),
                              ("priority", "Blocker")
                          ])
-@pytest.mark.api
 @allure.title("Test API update issue")
 def test_api_update_issue(update_field, new_value):
     with allure.step("Test preparation"):
@@ -126,7 +133,6 @@ def test_api_update_issue(update_field, new_value):
                and current_value == new_value
 
 
-@pytest.mark.api
 @allure.title("Test API cleanup")
 def test_api_cleanup():
     for issue_key in issue_keys:
